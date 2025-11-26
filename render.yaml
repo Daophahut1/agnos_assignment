@@ -1,0 +1,12 @@
+services:
+  - type: web
+    name: agnos-web
+    env: node
+    branch: main
+    plan: starter
+    buildCommand: npm run build
+    startCommand: npm start
+    root: .
+    envVars:
+      - key: NODE_ENV
+        value: production

@@ -1,26 +1,170 @@
 @import "tailwindcss";
+@import "react-day-picker/dist/style.css";
+
+@theme {
+  --color-primary: #3F8CFF;
+  --color-primary-light: #D1E3FF;
+  --color-primary-soft: #E8F1FF;
+  --color-primary-dark: #1B2B50;
+  --color-secondary: #64748B;
+  --color-accent: #0EA5E9;
+  --color-background: #F8FAFC;
+  --color-surface: #FFFFFF;
+  --color-rdp-cell-size: 40px;
+  --color-rdp-accent-color: var(--color-primary);
+  --color-rdp-background-color: var(--color-primary-soft);
+
+  --animate-pulse-slow: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  --animate-float: float 6s ease-in-out infinite;
+  --animate-slide-up: slideUp 0.5s ease-out forwards;
+
+  --keyframes-float: {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+  };
+
+  --keyframes-slideUp: {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  };
+}
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --background: #F8FAFC;
+  --foreground: #1B2B50;
 }
 
 body {
-  background: var(--background);
+  background-color: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: system-ui, -apple-system, sans-serif;
+  background-image:
+    radial-gradient(at 0% 0%, rgba(63, 140, 255, 0.1) 0px, transparent 50%),
+    radial-gradient(at 100% 0%, rgba(14, 165, 233, 0.1) 0px, transparent 50%),
+    radial-gradient(at 100% 100%, rgba(63, 140, 255, 0.05) 0px, transparent 50%);
+  background-attachment: fixed;
+}
+
+/* Custom Utilities */
+.glass-panel {
+  background: rgba(255, 255, 255, 0.8);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  box-shadow:
+    0 4px 6px -1px rgba(0, 0, 0, 0.05),
+    0 2px 4px -1px rgba(0, 0, 0, 0.03),
+    inset 0 0 20px rgba(255, 255, 255, 0.5);
+}
+
+/* Scrollbar */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background-color: rgba(63, 140, 255, 0.2);
+  border-radius: 20px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(63, 140, 255, 0.4);
+}
+
+/* Custom Date Picker Styling */
+input[type="date"]::-webkit-calendar-picker-indicator {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%233F8CFF'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z'%3F%3E%3C/svg%3E");
+  background-position: center;
+  background-size: contain;
+  background-repeat: no-repeat;
+  cursor: pointer;
+  opacity: 0.6;
+  transition: all 0.2s ease;
+  padding: 4px;
+  border-radius: 4px;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator:hover {
+  opacity: 1;
+  background-color: rgba(63, 140, 255, 0.1);
+  transform: scale(1.1);
+}
+
+.rdp {
+  --rdp-cell-size: 40px;
+  --rdp-accent-color: var(--color-primary);
+  --rdp-background-color: var(--color-primary-soft);
+  margin: 0;
+}
+
+.rdp-day_selected:not([disabled]), .rdp-day_selected:focus:not([disabled]), .rdp-day_selected:active:not([disabled]), .rdp-day_selected:hover:not([disabled]) {
+  background-color: var(--color-primary);
+  color: white;
+  font-weight: bold;
+}
+
+.rdp-button:hover:not([disabled]):not(.rdp-day_selected) {
+  background-color: var(--color-primary-soft);
+  color: var(--color-primary-dark);
+}
+
+.rdp-day_today {
+  color: var(--color-primary);
+  font-weight: bold;
+}
+
+/* React Day Picker Customization */
+.rdp-dropdown_year, .rdp-dropdown_month {
+  -webkit-appearance: none;
+  appearance: none;
+  padding: 6px 28px 6px 12px;
+  border-radius: 10px;
+  border: 1px solid var(--color-primary-light);
+  background-color: white;
+  color: var(--color-primary-dark);
+  font-size: 0.875rem;
+  font-weight: 600;
+  outline: none;
+  cursor: pointer;
+  transition: all 0.2s;
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%233F8CFF'%3e%3cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3e%3c/path%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 8px center;
+  background-size: 16px;
+  box-shadow: 0 2px 4px rgba(63, 140, 255, 0.05);
+}
+
+.rdp-dropdown_year:hover, .rdp-dropdown_month:hover {
+  border-color: var(--color-primary);
+  background-color: var(--color-primary-soft);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 6px rgba(63, 140, 255, 0.1);
+}
+
+.rdp-dropdown_year:focus, .rdp-dropdown_month:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(63, 140, 255, 0.15);
+}
+
+.rdp-caption_dropdowns {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  margin-bottom: 8px;
+}
+
+.rdp-nav_button {
+  background-color: white !important;
+  border: 1px solid var(--color-primary-light) !important;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.rdp-nav_button:hover {
+  background-color: var(--color-primary) !important;
+  color: white !important;
+  border-color: var(--color-primary) !important;
 }
